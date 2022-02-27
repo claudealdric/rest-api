@@ -87,12 +87,12 @@ export class DoctorsService {
     doctorId: number,
     dateTime: Date,
   ): Promise<boolean> {
-    const threshold = 3;
+    const countThreshold = 3;
     const appointmentsCount = await this.appointmentsRepository.count({
       doctorId,
       dateTime,
     });
-    return appointmentsCount >= threshold;
+    return appointmentsCount >= countThreshold;
   }
 
   async deleteAppointment(id: number): Promise<Appointment> {
