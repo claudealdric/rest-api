@@ -39,7 +39,17 @@ export class DoctorsService {
   }
 
   private _isValidAppointmentDateTime(dateTime: Date): boolean {
-    return !isNaN(dateTime.valueOf()) && dateTime.getMinutes() % 15 === 0;
+    return (
+      this._isValidDateTime(dateTime) && this._isIn15MinuteInterval(dateTime)
+    );
+  }
+
+  private _isValidDateTime(dateTime: Date): boolean {
+    return !isNaN(dateTime.valueOf());
+  }
+
+  private _isIn15MinuteInterval(dateTime: Date): boolean {
+    return dateTime.getMinutes() % 15 === 0;
   }
 
   getAppointmentsForDoctorId(doctorId: number, dateTimeString: string) {
