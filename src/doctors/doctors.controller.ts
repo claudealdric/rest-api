@@ -28,9 +28,12 @@ export class DoctorsController {
   @Get('/appointments')
   getAppointments(
     @Query('doctorId', ParseIntPipe) doctorId: number,
-    @Query('date') date: string,
+    @Query('dateTime') dateTimeString: string,
   ) {
-    return this.doctorsService.getAppointmentsForDoctorId(doctorId, date);
+    return this.doctorsService.getAppointmentsForDoctorId(
+      doctorId,
+      dateTimeString,
+    );
   }
 
   @Delete('/appointments/:id')

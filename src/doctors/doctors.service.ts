@@ -18,20 +18,21 @@ export class DoctorsService {
   }
 
   createAppointment(dto: CreateAppointmentDto) {
-    const time = new Date(dto.dateTime);
+    const dateTime = new Date(dto.dateTime);
+
     return this.appointmentsRepository.insert({
-      time,
+      dateTime,
       doctorId: dto.doctorId,
     });
   }
 
-  getAppointmentsForDoctorId(doctorId: number, date: string) {
-    const startDate = new Date(date);
+  getAppointmentsForDoctorId(doctorId: number, dateTimeString: string) {
+    const startDate = new Date(dateTimeString);
     const endDate = this._add24Hours(startDate);
 
     return this.appointmentsRepository.find({
       doctorId,
-      time: Between(startDate, endDate),
+      dateTime: Between(startDate, endDate),
     });
   }
 
