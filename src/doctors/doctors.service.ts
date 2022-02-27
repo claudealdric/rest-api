@@ -40,4 +40,8 @@ export class DoctorsService {
     newDate.setHours(newDate.getHours() + 24);
     return newDate;
   }
+
+  deleteAppointment(id: number) {
+    return this.appointmentsRepository.delete(id);
+  }
 }
