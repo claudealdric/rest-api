@@ -12,4 +12,8 @@ export class UsersService {
   getUsers(): Promise<User[]> {
     return this.usersRepository.find();
   }
+
+  deleteUser(id: number) {
+    return this.usersRepository.delete(id);
+  }
 }
