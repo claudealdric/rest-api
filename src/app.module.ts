@@ -3,10 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import 'dotenv/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { DoctorsModule } from './doctors/doctors.module';
+import { Appointment } from './entities/appointment.entity';
 import { Doctor } from './entities/doctor.entity';
 import { User } from './entities/user.entity';
 import { UsersModule } from './users/users.module';
-import { DoctorsModule } from './doctors/doctors.module';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { DoctorsModule } from './doctors/doctors.module';
       username: 'claude',
       password: process.env.DB_PASSWORD,
       database: 'rest_api',
-      entities: [Doctor, User],
+      entities: [Appointment, Doctor, User],
       synchronize: true,
       ssl: { rejectUnauthorized: false },
     }),
