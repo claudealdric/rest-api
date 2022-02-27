@@ -13,7 +13,7 @@ export class Appointment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'timestamptz' })
   dateTime: Date;
 
   @Column()
