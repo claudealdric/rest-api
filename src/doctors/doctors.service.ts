@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Appointment } from 'src/entities/appointment.entity';
 import { Doctor } from 'src/entities/doctor.entity';
@@ -18,11 +18,28 @@ export class DoctorsService {
   }
 
   createAppointment(dto: CreateAppointmentDto) {
+    const appointmentDateTime = this._getAppointmentDateTime(dto.dateTime);
+
+    if (!this._isValidAppointmentDateTime(appointmentDateTime)) {
+      throw new BadRequestException('Invalid appointment time');
+    }
+
     const newAppointment = this.appointmentsRepository.create({
       ...dto,
-      dateTime: new Date(dto.dateTime),
+      dateTime: appointmentDateTime,
     });
     return this.appointmentsRepository.save(newAppointment);
+  }
+
+  private _getAppointmentDateTime(dateTimeString: string): Date {
+    const appointmentDateTime = new Date(dateTimeString);
+    appointmentDateTime.setSeconds(0);
+    appointmentDateTime.setMilliseconds(0);
+    return appointmentDateTime;
+  }
+
+  private _isValidAppointmentDateTime(dateTime: Date): boolean {
+    return !isNaN(dateTime.valueOf()) && dateTime.getMinutes() % 15 === 0;
   }
 
   getAppointmentsForDoctorId(doctorId: number, dateTimeString: string) {
