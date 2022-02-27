@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { Doctor } from './entities/doctor.entity';
 import { User } from './entities/user.entity';
 import { UsersModule } from './users/users.module';
+import { DoctorsModule } from './doctors/doctors.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { UsersModule } from './users/users.module';
       ssl: { rejectUnauthorized: false },
     }),
     UsersModule,
+    DoctorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
