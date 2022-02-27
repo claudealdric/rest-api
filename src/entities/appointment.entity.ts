@@ -37,6 +37,7 @@ export class Appointment {
   @ManyToOne(
     () => AppointmentKind,
     (appointmentKind) => appointmentKind.appointments,
+    { eager: true },
   )
   @JoinColumn({ name: 'appointmentKindId' })
   appointmentKind: AppointmentKind;
