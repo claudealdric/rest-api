@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import 'dotenv/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { Doctor } from './entities/doctor.entity';
 import { User } from './entities/user.entity';
 import { UsersModule } from './users/users.module';
 
@@ -15,7 +16,7 @@ import { UsersModule } from './users/users.module';
       username: 'claude',
       password: process.env.DB_PASSWORD,
       database: 'rest_api',
-      entities: [User],
+      entities: [Doctor, User],
       synchronize: true,
       ssl: { rejectUnauthorized: false },
     }),
