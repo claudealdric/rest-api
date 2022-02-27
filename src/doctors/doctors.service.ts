@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Appointment } from 'src/entities/appointment.entity';
 import { Doctor } from 'src/entities/doctor.entity';
@@ -86,7 +90,13 @@ export class DoctorsService {
     return newDate;
   }
 
-  deleteAppointment(id: number) {
-    return this.appointmentsRepository.delete(id);
+  async deleteAppointment(id: number) {
+    const appointment = await this.appointmentsRepository.findOne(id);
+
+    if (!appointment) {
+      throw new NotFoundException('Appointment ID not found');
+    }
+
+    return this.appointmentsRepository.remove(appointment);
   }
 }
