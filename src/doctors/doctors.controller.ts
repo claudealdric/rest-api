@@ -22,11 +22,6 @@ export class DoctorsController {
     return this.doctorsService.getDoctors();
   }
 
-  @Post('/appointments')
-  createAppointment(@Body() dto: CreateAppointmentDto): Promise<Appointment> {
-    return this.doctorsService.createAppointment(dto);
-  }
-
   @Get('/appointments')
   getAppointments(
     @Query('doctorId', ParseIntPipe) doctorId: number,
@@ -36,6 +31,11 @@ export class DoctorsController {
       doctorId,
       dateTimeString,
     );
+  }
+
+  @Post('/appointments')
+  createAppointment(@Body() dto: CreateAppointmentDto): Promise<Appointment> {
+    return this.doctorsService.createAppointment(dto);
   }
 
   @Delete('/appointments/:id')

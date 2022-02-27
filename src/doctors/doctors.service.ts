@@ -21,6 +21,25 @@ export class DoctorsService {
     return this.doctorsRepository.find();
   }
 
+  getAppointmentsForDoctorId(
+    doctorId: number,
+    dateTimeString: string,
+  ): Promise<Appointment[]> {
+    const startDate = new Date(dateTimeString);
+    const endDate = this._add24Hours(startDate);
+
+    return this.appointmentsRepository.find({
+      doctorId,
+      dateTime: Between(startDate, endDate),
+    });
+  }
+
+  private _add24Hours(date: Date): Date {
+    const newDate = new Date(date);
+    newDate.setHours(newDate.getHours() + 24);
+    return newDate;
+  }
+
   async createAppointment(dto: CreateAppointmentDto): Promise<Appointment> {
     const appointmentDateTime = this._getAppointmentDateTime(dto.dateTime);
 
@@ -72,25 +91,6 @@ export class DoctorsService {
       dateTime,
     });
     return appointmentsCount >= threshold;
-  }
-
-  getAppointmentsForDoctorId(
-    doctorId: number,
-    dateTimeString: string,
-  ): Promise<Appointment[]> {
-    const startDate = new Date(dateTimeString);
-    const endDate = this._add24Hours(startDate);
-
-    return this.appointmentsRepository.find({
-      doctorId,
-      dateTime: Between(startDate, endDate),
-    });
-  }
-
-  private _add24Hours(date: Date): Date {
-    const newDate = new Date(date);
-    newDate.setHours(newDate.getHours() + 24);
-    return newDate;
   }
 
   async deleteAppointment(id: number): Promise<Appointment> {
