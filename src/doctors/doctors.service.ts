@@ -63,16 +63,6 @@ export class DoctorsService {
   async createAppointment(dto: CreateAppointmentDto): Promise<Appointment> {
     const appointmentDateTime = this._getAppointmentDateTime(dto.dateTime);
 
-    if (!this.utilsService.isValidDateTime(appointmentDateTime)) {
-      throw new BadRequestException('Invalid date/time format');
-    }
-
-    if (!this._isIn15MinuteInterval(appointmentDateTime)) {
-      throw new BadRequestException(
-        'Appointments can only start at 15-minute intervals',
-      );
-    }
-
     if (await this._hasTooManyAppointments(dto.doctorId, appointmentDateTime)) {
       throw new BadRequestException(
         'There are too many appointments for the given date/time',
@@ -91,10 +81,6 @@ export class DoctorsService {
     appointmentDateTime.setSeconds(0);
     appointmentDateTime.setMilliseconds(0);
     return appointmentDateTime;
-  }
-
-  private _isIn15MinuteInterval(dateTime: Date): boolean {
-    return dateTime.getMinutes() % 15 === 0;
   }
 
   private async _hasTooManyAppointments(
