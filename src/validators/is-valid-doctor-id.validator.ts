@@ -1,18 +1,17 @@
 import { registerDecorator } from 'class-validator';
-import { Doctor } from 'src/entities/doctor.entity';
 import { getConnection } from 'typeorm';
 
-export function IsValidDoctorId(): PropertyDecorator {
+export function IsValidEntityId(entityName: string): PropertyDecorator {
   return function (object: object, propertyName: string) {
     registerDecorator({
       propertyName,
-      name: 'isValidDoctorId',
+      name: 'isValidEntityId',
       target: object.constructor,
-      options: { message: 'Invalid doctor ID' },
+      options: { message: `Invalid ID for entity: ${entityName}` },
       validator: {
         async validate(input: unknown): Promise<boolean> {
           return Boolean(
-            await getConnection().getRepository(Doctor).findOne(input),
+            await getConnection().getRepository(entityName).findOne(input),
           );
         },
       },
