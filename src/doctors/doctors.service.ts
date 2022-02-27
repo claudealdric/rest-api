@@ -54,10 +54,18 @@ export class DoctorsService {
 
     const endDate = this.utilsService.add24Hours(startDate);
 
-    return this.appointmentsRepository.find({
-      doctorId: Number(doctorId),
-      dateTime: Between(startDate, endDate),
-    });
+    return this.appointmentsRepository
+      .createQueryBuilder('appointment')
+      .select(['appointment.id', 'appointment.dateTime'])
+      .where('appointment.doctorId = :doctorId')
+      .andWhere('appointment.dateTime >= :startDate')
+      .andWhere('appointment.dateTime < :endDate')
+      .leftJoinAndSelect('appointment.patient', 'patient')
+      .leftJoinAndSelect('appointment.appointmentKind', 'appointmentKind')
+      .orderBy('appointment.dateTime')
+      .addOrderBy('patient.lastName')
+      .setParameters({ doctorId, startDate, endDate })
+      .getMany();
   }
 
   async createAppointment(dto: CreateAppointmentDto): Promise<Appointment> {
