@@ -24,13 +24,13 @@ export class DoctorsController {
 
   @Get('/appointments')
   getAppointments(
-    @Query('doctorId', ParseIntPipe) doctorId: number,
-    @Query('dateTime') dateTimeString: string,
+    @Query() query: Record<string, string>,
   ): Promise<Appointment[]> {
-    return this.doctorsService.getAppointmentsForDoctorId(
+    const { doctorId, dateTime } = query;
+    return this.doctorsService.getAppointments({
       doctorId,
-      dateTimeString,
-    );
+      dateTimeString: dateTime,
+    });
   }
 
   @Post('/appointments')

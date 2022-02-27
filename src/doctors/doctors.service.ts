@@ -21,15 +21,39 @@ export class DoctorsService {
     return this.doctorsRepository.find();
   }
 
-  getAppointmentsForDoctorId(
-    doctorId: number,
-    dateTimeString: string,
-  ): Promise<Appointment[]> {
+  getAppointments({
+    doctorId,
+    dateTimeString,
+  }: {
+    doctorId: string;
+    dateTimeString: string;
+  }): Promise<Appointment[]> {
+    if (!doctorId) {
+      throw new BadRequestException(
+        'Required query parameter missing: doctorId',
+      );
+    }
+
+    if (isNaN(Number(doctorId))) {
+      throw new BadRequestException('Doctor ID must be a number');
+    }
+
+    if (!dateTimeString) {
+      throw new BadRequestException(
+        'Required query parameter missing: dateTime',
+      );
+    }
+
     const startDate = new Date(dateTimeString);
+
+    if (!this._isValidDateTime(startDate)) {
+      throw new BadRequestException('Invalid date/time format');
+    }
+
     const endDate = this._add24Hours(startDate);
 
     return this.appointmentsRepository.find({
-      doctorId,
+      doctorId: Number(doctorId),
       dateTime: Between(startDate, endDate),
     });
   }
