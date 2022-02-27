@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Appointment } from 'src/entities/appointment.entity';
 import { Doctor } from 'src/entities/doctor.entity';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { CreateAppointmentDto } from './create-appointment.dto';
 
 @Injectable()
@@ -23,5 +23,21 @@ export class DoctorsService {
       time,
       doctorId: dto.doctorId,
     });
+  }
+
+  getAppointmentsForDoctorId(doctorId: number, date: string) {
+    const startDate = new Date(date);
+    const endDate = this._add24Hours(startDate);
+
+    return this.appointmentsRepository.find({
+      doctorId,
+      time: Between(startDate, endDate),
+    });
+  }
+
+  private _add24Hours(date: Date): Date {
+    const newDate = new Date(date);
+    newDate.setHours(newDate.getHours() + 24);
+    return newDate;
   }
 }
