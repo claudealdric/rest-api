@@ -16,7 +16,7 @@ import { UsersModule } from './users/users.module';
       host: 'oregon-postgres.render.com',
       port: 5432,
       username: 'claude',
-      password: process.env.DB_PASSWORD,
+      password: 'DW6hwmYqKe1qPut89ewWIy8SQxQMzwU3',
       database: 'rest_api',
       entities: [Appointment, Doctor, User],
       synchronize: true,
