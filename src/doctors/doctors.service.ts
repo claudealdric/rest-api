@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Appointment } from 'src/entities/appointment.entity';
 import { Doctor } from 'src/entities/doctor.entity';
+import { UtilsService } from 'src/utils/utils.service';
 import { Between, Repository } from 'typeorm';
 import { CreateAppointmentDto } from './create-appointment.dto';
 
@@ -15,6 +16,7 @@ export class DoctorsService {
     @InjectRepository(Appointment)
     private appointmentsRepository: Repository<Appointment>,
     @InjectRepository(Doctor) private doctorsRepository: Repository<Doctor>,
+    private readonly utilsService: UtilsService,
   ) {}
 
   getDoctors(): Promise<Doctor[]> {
@@ -46,11 +48,11 @@ export class DoctorsService {
 
     const startDate = new Date(dateTimeString);
 
-    if (!this._isValidDateTime(startDate)) {
+    if (!this.utilsService.isValidDateTime(startDate)) {
       throw new BadRequestException('Invalid date/time format');
     }
 
-    const endDate = this._add24Hours(startDate);
+    const endDate = this.utilsService.add24Hours(startDate);
 
     return this.appointmentsRepository.find({
       doctorId: Number(doctorId),
@@ -58,16 +60,10 @@ export class DoctorsService {
     });
   }
 
-  private _add24Hours(date: Date): Date {
-    const newDate = new Date(date);
-    newDate.setHours(newDate.getHours() + 24);
-    return newDate;
-  }
-
   async createAppointment(dto: CreateAppointmentDto): Promise<Appointment> {
     const appointmentDateTime = this._getAppointmentDateTime(dto.dateTime);
 
-    if (!this._isValidDateTime(appointmentDateTime)) {
+    if (!this.utilsService.isValidDateTime(appointmentDateTime)) {
       throw new BadRequestException('Invalid date/time format');
     }
 
@@ -95,10 +91,6 @@ export class DoctorsService {
     appointmentDateTime.setSeconds(0);
     appointmentDateTime.setMilliseconds(0);
     return appointmentDateTime;
-  }
-
-  private _isValidDateTime(dateTime: Date): boolean {
-    return !isNaN(dateTime.valueOf());
   }
 
   private _isIn15MinuteInterval(dateTime: Date): boolean {

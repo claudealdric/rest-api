@@ -7,6 +7,7 @@ import { AppointmentKind } from './entities/appointment-kind.entity';
 import { Appointment } from './entities/appointment.entity';
 import { Doctor } from './entities/doctor.entity';
 import { Patient } from './entities/patient.entity';
+import { UtilsService } from './utils/utils.service';
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import { Patient } from './entities/patient.entity';
     DoctorsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, UtilsService],
 })
 export class AppModule {}

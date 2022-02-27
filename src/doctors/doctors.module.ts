@@ -4,6 +4,7 @@ import { AppointmentKind } from 'src/entities/appointment-kind.entity';
 import { Appointment } from 'src/entities/appointment.entity';
 import { Doctor } from 'src/entities/doctor.entity';
 import { Patient } from 'src/entities/patient.entity';
+import { UtilsService } from 'src/utils/utils.service';
 import { DoctorsController } from './doctors.controller';
 import { DoctorsService } from './doctors.service';
 
@@ -12,6 +13,6 @@ import { DoctorsService } from './doctors.service';
     TypeOrmModule.forFeature([Appointment, AppointmentKind, Doctor, Patient]),
   ],
   controllers: [DoctorsController],
-  providers: [DoctorsService],
+  providers: [DoctorsService, UtilsService],
 })
 export class DoctorsModule {}
