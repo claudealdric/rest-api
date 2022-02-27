@@ -14,24 +14,24 @@ export class Appointment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'timestamptz' })
+  @Column({ type: 'timestamptz', name: 'date_time' })
   dateTime: Date;
 
-  @Column()
+  @Column({ name: 'doctor_id' })
   doctorId: number;
 
-  @Column()
+  @Column({ name: 'patient_id' })
   patientId: number;
 
-  @Column({ default: 1 })
+  @Column({ default: 1, name: 'appointment_kind_id' })
   appointmentKindId: number;
 
   @ManyToOne(() => Doctor, (doctor) => doctor.appointments)
-  @JoinColumn({ name: 'doctorId' })
+  @JoinColumn({ name: 'doctor_id' })
   doctor: Doctor;
 
   @ManyToOne(() => Patient, (patient) => patient.appointments, { eager: true })
-  @JoinColumn({ name: 'patientId' })
+  @JoinColumn({ name: 'patient_id' })
   patient: Patient;
 
   @ManyToOne(
@@ -39,6 +39,6 @@ export class Appointment {
     (appointmentKind) => appointmentKind.appointments,
     { eager: true },
   )
-  @JoinColumn({ name: 'appointmentKindId' })
+  @JoinColumn({ name: 'appointment_kind_id' })
   appointmentKind: AppointmentKind;
 }
