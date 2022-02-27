@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Doctor } from './doctor.entity';
 
 @Entity()
@@ -9,6 +15,10 @@ export class Appointment {
   @Column()
   time: Date;
 
+  @Column()
+  doctorId: number;
+
   @ManyToOne(() => Doctor, (doctor) => doctor.appointments)
+  @JoinColumn({ name: 'doctorId' })
   doctor: Doctor;
 }
