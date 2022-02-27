@@ -9,4 +9,10 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  @Get('/health-check')
+  checkHealth(): string {
+    const now = new Date();
+    return now.toISOString();
+  }
 }
