@@ -18,12 +18,11 @@ export class DoctorsService {
   }
 
   createAppointment(dto: CreateAppointmentDto) {
-    const dateTime = new Date(dto.dateTime);
-
-    return this.appointmentsRepository.insert({
-      dateTime,
-      doctorId: dto.doctorId,
+    const newAppointment = this.appointmentsRepository.create({
+      ...dto,
+      dateTime: new Date(dto.dateTime),
     });
+    return this.appointmentsRepository.save(newAppointment);
   }
 
   getAppointmentsForDoctorId(doctorId: number, dateTimeString: string) {
