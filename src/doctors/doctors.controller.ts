@@ -8,6 +8,8 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { Appointment } from 'src/entities/appointment.entity';
+import { Doctor } from 'src/entities/doctor.entity';
 import { CreateAppointmentDto } from './create-appointment.dto';
 import { DoctorsService } from './doctors.service';
 
@@ -16,12 +18,12 @@ export class DoctorsController {
   constructor(private readonly doctorsService: DoctorsService) {}
 
   @Get()
-  getDoctors() {
+  getDoctors(): Promise<Doctor[]> {
     return this.doctorsService.getDoctors();
   }
 
   @Post('/appointments')
-  createAppointment(@Body() dto: CreateAppointmentDto) {
+  createAppointment(@Body() dto: CreateAppointmentDto): Promise<Appointment> {
     return this.doctorsService.createAppointment(dto);
   }
 
@@ -29,7 +31,7 @@ export class DoctorsController {
   getAppointments(
     @Query('doctorId', ParseIntPipe) doctorId: number,
     @Query('dateTime') dateTimeString: string,
-  ) {
+  ): Promise<Appointment[]> {
     return this.doctorsService.getAppointmentsForDoctorId(
       doctorId,
       dateTimeString,
@@ -37,7 +39,9 @@ export class DoctorsController {
   }
 
   @Delete('/appointments/:id')
-  deleteAppointment(@Param('id', ParseIntPipe) id: number) {
+  deleteAppointment(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Appointment> {
     return this.doctorsService.deleteAppointment(id);
   }
 }

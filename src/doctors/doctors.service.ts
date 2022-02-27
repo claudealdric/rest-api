@@ -21,7 +21,7 @@ export class DoctorsService {
     return this.doctorsRepository.find();
   }
 
-  async createAppointment(dto: CreateAppointmentDto) {
+  async createAppointment(dto: CreateAppointmentDto): Promise<Appointment> {
     const appointmentDateTime = this._getAppointmentDateTime(dto.dateTime);
 
     if (!this._isValidDateTime(appointmentDateTime)) {
@@ -74,7 +74,10 @@ export class DoctorsService {
     return appointmentsCount >= threshold;
   }
 
-  getAppointmentsForDoctorId(doctorId: number, dateTimeString: string) {
+  getAppointmentsForDoctorId(
+    doctorId: number,
+    dateTimeString: string,
+  ): Promise<Appointment[]> {
     const startDate = new Date(dateTimeString);
     const endDate = this._add24Hours(startDate);
 
@@ -90,7 +93,7 @@ export class DoctorsService {
     return newDate;
   }
 
-  async deleteAppointment(id: number) {
+  async deleteAppointment(id: number): Promise<Appointment> {
     const appointment = await this.appointmentsRepository.findOne(id);
 
     if (!appointment) {
