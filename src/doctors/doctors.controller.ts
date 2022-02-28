@@ -38,6 +38,13 @@ export class DoctorsController {
     return this.doctorsService.createAppointment(dto);
   }
 
+  @Get('/appointments/:id')
+  getAppointmentById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Appointment> {
+    return this.doctorsService.getAppointmentById(id);
+  }
+
   @Delete('/appointments/:id')
   deleteAppointment(
     @Param('id', ParseIntPipe) id: number,

@@ -84,6 +84,14 @@ export class DoctorsService {
     return appointmentsCount >= countThreshold;
   }
 
+  async getAppointmentById(id: number): Promise<Appointment> {
+    const appointment = await this.appointmentsRepository.findOne(id);
+    if (!appointment) {
+      throw new NotFoundException('Appointment ID not found');
+    }
+    return appointment;
+  }
+
   async deleteAppointment(id: number): Promise<Appointment> {
     const appointment = await this.appointmentsRepository.findOne(id);
 
