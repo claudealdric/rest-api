@@ -8,6 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { ApiQuery } from '@nestjs/swagger';
 import { Appointment } from 'src/entities/appointment.entity';
 import { Doctor } from 'src/entities/doctor.entity';
 import { CreateAppointmentDto } from './create-appointment.dto';
@@ -23,14 +24,14 @@ export class DoctorsController {
   }
 
   @Get('/appointments')
+  @ApiQuery({ name: 'take', type: Number, required: false })
+  @ApiQuery({ name: 'skip', type: Number, required: false })
+  @ApiQuery({ name: 'dateTime', type: Date })
+  @ApiQuery({ name: 'doctorId', type: Number })
   getAppointments(
-    @Query('doctorId') doctorId: string,
-    @Query('dateTime') dateTimeString: string,
+    @Query() query: Record<string, string>,
   ): Promise<Appointment[]> {
-    return this.doctorsService.getAppointments({
-      doctorId,
-      dateTimeString,
-    });
+    return this.doctorsService.getAppointments(query);
   }
 
   @Post('/appointments')

@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Appointment } from 'src/entities/appointment.entity';
 import { Doctor } from 'src/entities/doctor.entity';
 import { UtilsService } from 'src/utils/utils.service';
-import { Between, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateAppointmentDto } from './create-appointment.dto';
 
 @Injectable()
@@ -23,13 +23,9 @@ export class DoctorsService {
     return this.doctorsRepository.find();
   }
 
-  getAppointments({
-    doctorId,
-    dateTimeString,
-  }: {
-    doctorId: string;
-    dateTimeString: string;
-  }): Promise<Appointment[]> {
+  getAppointments(query: Record<string, string>): Promise<Appointment[]> {
+    const { doctorId, dateTime, skip, take } = query;
+
     if (!doctorId) {
       throw new BadRequestException(
         'Required query parameter missing: doctorId',
@@ -40,13 +36,13 @@ export class DoctorsService {
       throw new BadRequestException('Doctor ID must be a number');
     }
 
-    if (!dateTimeString) {
+    if (!dateTime) {
       throw new BadRequestException(
         'Required query parameter missing: dateTime',
       );
     }
 
-    const startDate = new Date(dateTimeString);
+    const startDate = new Date(dateTime);
 
     if (!this.utilsService.isValidDateTime(startDate)) {
       throw new BadRequestException('Invalid date/time format');
@@ -54,7 +50,7 @@ export class DoctorsService {
 
     const endDate = this.utilsService.add24Hours(startDate);
 
-    return this.appointmentsRepository
+    const queryBuilder = this.appointmentsRepository
       .createQueryBuilder('appointment')
       .select(['appointment.id', 'appointment.dateTime'])
       .where('appointment.doctorId = :doctorId')
@@ -64,8 +60,11 @@ export class DoctorsService {
       .leftJoinAndSelect('appointment.appointmentKind', 'appointmentKind')
       .orderBy('appointment.dateTime')
       .addOrderBy('patient.lastName')
-      .setParameters({ doctorId, startDate, endDate })
-      .getMany();
+      .skip(skip !== undefined ? Number(skip) : 0)
+      .take(take !== undefined ? Number(take) : 10)
+      .setParameters({ doctorId, startDate, endDate });
+
+    return queryBuilder.getMany();
   }
 
   async createAppointment(dto: CreateAppointmentDto): Promise<Appointment> {
