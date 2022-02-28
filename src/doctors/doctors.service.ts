@@ -8,8 +8,8 @@ import { Appointment } from 'src/entities/appointment.entity';
 import { Doctor } from 'src/entities/doctor.entity';
 import { UtilsService } from 'src/utils/utils.service';
 import { Repository } from 'typeorm';
-import { CreateAppointmentDto } from './create-appointment.dto';
-import { GetAppointmentsDto } from './get-appointments.dto';
+import { CreateAppointmentDto } from './dtos/create-appointment.dto';
+import { GetAppointmentsDto } from './dtos/get-appointments.dto';
 
 @Injectable()
 export class DoctorsService {

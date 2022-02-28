@@ -11,9 +11,9 @@ import {
 import { ApiQuery } from '@nestjs/swagger';
 import { Appointment } from 'src/entities/appointment.entity';
 import { Doctor } from 'src/entities/doctor.entity';
-import { CreateAppointmentDto } from './create-appointment.dto';
 import { DoctorsService } from './doctors.service';
-import { GetAppointmentsDto } from './get-appointments.dto';
+import { CreateAppointmentDto } from './dtos/create-appointment.dto';
+import { GetAppointmentsDto } from './dtos/get-appointments.dto';
 
 @Controller('doctors')
 export class DoctorsController {
