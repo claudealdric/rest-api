@@ -9,6 +9,7 @@ import { Doctor } from 'src/entities/doctor.entity';
 import { UtilsService } from 'src/utils/utils.service';
 import { Repository } from 'typeorm';
 import { CreateAppointmentDto } from './create-appointment.dto';
+import { GetAppointmentsDto } from './get-appointments.dto';
 
 @Injectable()
 export class DoctorsService {
@@ -23,31 +24,9 @@ export class DoctorsService {
     return this.doctorsRepository.find();
   }
 
-  getAppointments(query: Record<string, string>): Promise<Appointment[]> {
-    const { doctorId, dateTime, skip, take } = query;
-
-    if (!doctorId) {
-      throw new BadRequestException(
-        'Required query parameter missing: doctorId',
-      );
-    }
-
-    if (isNaN(Number(doctorId))) {
-      throw new BadRequestException('Doctor ID must be a number');
-    }
-
-    if (!dateTime) {
-      throw new BadRequestException(
-        'Required query parameter missing: dateTime',
-      );
-    }
-
+  getAppointments(dto: GetAppointmentsDto): Promise<Appointment[]> {
+    const { doctorId, dateTime, skip, take } = dto;
     const startDate = new Date(dateTime);
-
-    if (!this.utilsService.isValidDateTime(startDate)) {
-      throw new BadRequestException('Invalid date/time format');
-    }
-
     const endDate = this.utilsService.add24Hours(startDate);
 
     const queryBuilder = this.appointmentsRepository

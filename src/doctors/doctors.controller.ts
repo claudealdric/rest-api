@@ -13,6 +13,7 @@ import { Appointment } from 'src/entities/appointment.entity';
 import { Doctor } from 'src/entities/doctor.entity';
 import { CreateAppointmentDto } from './create-appointment.dto';
 import { DoctorsService } from './doctors.service';
+import { GetAppointmentsDto } from './get-appointments.dto';
 
 @Controller('doctors')
 export class DoctorsController {
@@ -26,12 +27,10 @@ export class DoctorsController {
   @Get('/appointments')
   @ApiQuery({ name: 'take', type: Number, required: false })
   @ApiQuery({ name: 'skip', type: Number, required: false })
-  @ApiQuery({ name: 'dateTime', type: Date })
-  @ApiQuery({ name: 'doctorId', type: Number })
-  getAppointments(
-    @Query() query: Record<string, string>,
-  ): Promise<Appointment[]> {
-    return this.doctorsService.getAppointments(query);
+  @ApiQuery({ name: 'dateTime', type: Date, required: true })
+  @ApiQuery({ name: 'doctorId', type: Number, required: true })
+  getAppointments(@Query() dto: GetAppointmentsDto): Promise<Appointment[]> {
+    return this.doctorsService.getAppointments(dto);
   }
 
   @Post('/appointments')
