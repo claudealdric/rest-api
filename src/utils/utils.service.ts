@@ -7,8 +7,4 @@ export class UtilsService {
     newDate.setHours(newDate.getHours() + 24);
     return newDate;
   }
-
-  isValidDateTime(dateTime: Date): boolean {
-    return !isNaN(dateTime.valueOf());
-  }
 }
