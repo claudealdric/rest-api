@@ -31,14 +31,17 @@ export class DoctorsService {
 
     const queryBuilder = this.appointmentsRepository
       .createQueryBuilder('appointment')
-      .select(['appointment.id', 'appointment.dateTime'])
+      .select([
+        'appointment.id',
+        'appointment.dateTime',
+        'appointment.patientFirstName',
+        'appointment.patientLastName',
+      ])
       .where('appointment.doctorId = :doctorId')
       .andWhere('appointment.dateTime >= :startDate')
       .andWhere('appointment.dateTime < :endDate')
-      .leftJoinAndSelect('appointment.patient', 'patient')
       .leftJoinAndSelect('appointment.appointmentKind', 'appointmentKind')
       .orderBy('appointment.dateTime')
-      .addOrderBy('patient.lastName')
       .skip(skip !== undefined ? Number(skip) : 0)
       .take(take !== undefined ? Number(take) : 10)
       .setParameters({ doctorId, startDate, endDate });

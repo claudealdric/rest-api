@@ -6,7 +6,6 @@ import { DoctorsModule } from './doctors/doctors.module';
 import { AppointmentKind } from './entities/appointment-kind.entity';
 import { Appointment } from './entities/appointment.entity';
 import { Doctor } from './entities/doctor.entity';
-import { Patient } from './entities/patient.entity';
 import { UtilsService } from './utils/utils.service';
 
 @Module({
@@ -18,7 +17,7 @@ import { UtilsService } from './utils/utils.service';
       username: 'claude',
       password: 'DW6hwmYqKe1qPut89ewWIy8SQxQMzwU3',
       database: 'rest_api',
-      entities: [Appointment, AppointmentKind, Doctor, Patient],
+      entities: [Appointment, AppointmentKind, Doctor],
       synchronize: true,
       ssl: { rejectUnauthorized: false },
     }),

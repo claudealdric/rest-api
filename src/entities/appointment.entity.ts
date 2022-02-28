@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 import { AppointmentKind } from './appointment-kind.entity';
 import { Doctor } from './doctor.entity';
-import { Patient } from './patient.entity';
 
 @Entity()
 export class Appointment {
@@ -20,8 +19,11 @@ export class Appointment {
   @Column({ name: 'doctor_id' })
   doctorId: number;
 
-  @Column({ name: 'patient_id' })
-  patientId: number;
+  @Column({ name: 'patient_first_name' })
+  patientFirstName: string;
+
+  @Column({ name: 'patient_last_name' })
+  patientLastName: string;
 
   @Column({ default: 1, name: 'appointment_kind_id' })
   appointmentKindId: number;
@@ -29,10 +31,6 @@ export class Appointment {
   @ManyToOne(() => Doctor, (doctor) => doctor.appointments)
   @JoinColumn({ name: 'doctor_id' })
   doctor: Doctor;
-
-  @ManyToOne(() => Patient, (patient) => patient.appointments, { eager: true })
-  @JoinColumn({ name: 'patient_id' })
-  patient: Patient;
 
   @ManyToOne(
     () => AppointmentKind,
